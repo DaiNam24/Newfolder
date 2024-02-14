@@ -1,0 +1,42 @@
+import numpy as np
+import time
+
+N=10**4
+print('N = %d' % N)
+
+t_mStart = time.time()
+
+K = np.zeros((N,N))
+for i in range (N):
+    if i<N-1:
+        K[i,i]=2
+        if i==0:
+            K[i,i+1]=-1
+        else:
+            K[i,i-1]=-1
+            K[i,i+1]=-1
+    else:
+        K[i,i]=1
+        K[i,i-1]=-1
+    i+=1
+
+f = np.zeros((N,1))
+f[N-1,0]=1/N
+
+t_mEnd = time.time()
+T_createMatrix = t_mEnd-t_mStart
+print('Time create matrix: %.9f' % T_createMatrix)
+
+t_sStart = time.time()
+#u = np.linalg.tensorsolve(K,f)
+u = np.matmul(np.linalg.inv(K),f)
+t_sEnd = time.time()
+
+T_solveU = t_sEnd-t_sStart
+print('Time solve u: %.9f' % T_solveU)
+
+print('u[N] = ',end="")
+print(u[N-1])
+
+
+
